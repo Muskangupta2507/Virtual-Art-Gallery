@@ -5,7 +5,8 @@ const port=8080;
 const mongoose=require('mongoose');
 
 
-mongoose.connect('mongodb://127.0.0.1:27017/virtualGallery')
+// mongoose.connect('mongodb://127.0.0.1:27017/virtualGallery')
+mongoose.connect('mongodb+srv://07muskangupta:<password>@cluster0.cehrzbj.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
 .then(()=>{console.log("DB Connected")})
 .catch((err)=>{
     console.log("DB error")
@@ -19,7 +20,7 @@ app.use(express.static(path.join(__dirname,'public')));
 app.use(express.urlencoded({extended:true}))
 
 app.get('/',(req,res)=>{
-    res.send("hello");
+    res.send("Home Page");
 })
 
 app.listen(port,()=>{

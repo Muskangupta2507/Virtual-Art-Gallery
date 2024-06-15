@@ -6,12 +6,15 @@ import fs from 'fs';
 import cookieParser from 'cookie-parser';
 import ejsMate from 'ejs-mate';
 import methodOverride from 'method-override';
+import { fileURLToPath } from 'url';
 // import authRoutes from './routes/auth.routes.js';
 // import playlistRoutes from './routes/playlist.routes.js';
 
 const app = express();
 dotenv.config();
 const PORT = process.env.PORT || 8000;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 app.engine('ejs',ejsMate);
 app.set('view engine','ejs');
 app.set('views',path.join(__dirname, 'views'));
@@ -39,3 +42,5 @@ app.listen(PORT,()=>{
     connectToMongoDB();
     console.log(`Server running at port ${PORT}`)
 })
+
+

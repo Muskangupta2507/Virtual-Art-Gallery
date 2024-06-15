@@ -1,28 +1,33 @@
-const express=require('express')
-const app=express()
-const path=require('path')
-const port=8080;
-const mongoose=require('mongoose');
+import express from 'express';
+import dotenv from 'dotenv';
+import connectToMongoDB from './db/connectToMongoDB.js';
+import path from 'path';
+import fs from 'fs';
+import cookieParser from 'cookie-parser';
+// import authRoutes from './routes/auth.routes.js';
+// import playlistRoutes from './routes/playlist.routes.js';
 
+const app = express();
+dotenv.config();
+const PORT = process.env.PORT || 8000;
+app.use(express.json()) //to parse the incoming requests with JSON payloads(from body of request)
+app.use(cookieParser()); // to parse through cookies
 
-// mongoose.connect('mongodb://127.0.0.1:27017/virtualGallery')
-mongoose.connect('mongodb+srv://07muskangupta:<password>@cluster0.cehrzbj.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
-.then(()=>{console.log("DB Connected")})
-.catch((err)=>{
-    console.log("DB error")
-    console.log(err)}
-);
+const uploadDir = path.join(process.cwd(), 'backend/public/uploads');
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+}
 
+// Middleware to serve static files from the backend/public/uploads directory
+app.use('/uploads', express.static(uploadDir));
 
-
-app.set('views',path.join(__dirname,'views'))
-app.use(express.static(path.join(__dirname,'public')));
-app.use(express.urlencoded({extended:true}))
-
-app.get('/',(req,res)=>{
-    res.send("Home Page");
+app.get("/",(req,res)=>{
+    res.send("hello");
 })
+// app.use('/api/auth',authRoutes);
+// app.use('/api/playlist',playlistRoutes);
 
-app.listen(port,()=>{
-    console.log(`server conneccted at port ${port}`)
+app.listen(PORT,()=>{
+    connectToMongoDB();
+    console.log(`Server running at port ${PORT}`)
 })
